@@ -13,6 +13,10 @@ export const auth = betterAuth({
   database: mongodbAdapter(db, {
     client,
   }),
+  trustedOrigins: [
+    "http://localhost:3000",
+    "https://*.vercel.app",
+  ],
   session: {
     cookieCache: {
       enabled: true,
