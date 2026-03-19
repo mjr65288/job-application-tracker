@@ -2,7 +2,7 @@
 
 import { JobApplication, Column } from "@/lib/models/models.types";
 import { Card, CardContent } from "./ui/card";
-import { Edit2, ExternalLink, MoreVertical, Plus, Trash2 } from "lucide-react";
+import { Copy, Edit2, ExternalLink, MoreVertical, Trash2 } from "lucide-react";
 import {
   DropdownMenu,
   DropdownMenuContent,
@@ -15,6 +15,16 @@ import {
   updateJobApplication,
 } from "@/lib/actions/job-applications";
 import {
+  AlertDialog,
+  AlertDialogAction,
+  AlertDialogCancel,
+  AlertDialogContent,
+  AlertDialogDescription,
+  AlertDialogFooter,
+  AlertDialogHeader,
+  AlertDialogTitle,
+} from "./ui/alert-dialog";
+import {
   Dialog,
   DialogContent,
   DialogDescription,
@@ -26,6 +36,7 @@ import { Label } from "./ui/label";
 import { Input } from "./ui/input";
 import { Textarea } from "./ui/textarea";
 import React, { useState } from "react";
+import { toast } from "sonner";
 interface JobApplicationCardProps {
   job: JobApplication;
   columns: Column[];
@@ -38,6 +49,7 @@ export default function JobApplicationCard({
   dragHandleProps,
 }: JobApplicationCardProps) {
   const [isEditing, setIsEditing] = useState(false);
+  const [showDeleteConfirm, setShowDeleteConfirm] = useState(false);
   const [formData, setFormData] = useState({
     company: job.company,
     position: job.position,
@@ -63,9 +75,12 @@ export default function JobApplicationCard({
 
       if (!result.error) {
         setIsEditing(false);
+        toast.success("Job application updated");
+      } else {
+        toast.error(result.error);
       }
     } catch (err) {
-      console.error("Failed to move job application: ", err);
+      toast.error("Failed to update job application");
     }
   }
 
@@ -74,10 +89,13 @@ export default function JobApplicationCard({
       const result = await deleteJobApplication(job._id);
 
       if (result.error) {
-        console.error("Failed to delete job application:", result.error);
+        toast.error(result.error);
+      } else {
+        setShowDeleteConfirm(false);
+        toast.success("Job application deleted");
       }
     } catch (err) {
-      console.error("Failed to move job application: ", err);
+      toast.error("Failed to delete job application");
     }
   }
 
@@ -86,8 +104,13 @@ export default function JobApplicationCard({
       const result = await updateJobApplication(job._id, {
         columnId: newColumnId,
       });
+      if (!result.error) {
+        toast.success("Job moved");
+      } else {
+        toast.error(result.error);
+      }
     } catch (err) {
-      console.error("Failed to move job application: ", err);
+      toast.error("Failed to move job");
     }
   }
   return (
@@ -103,6 +126,11 @@ export default function JobApplicationCard({
               <p className="text-xs text-muted-foreground mb-2">
                 {job.company}
               </p>
+              {job.appliedDate && (
+                <p className="text-xs text-muted-foreground mb-1">
+                  Applied {new Date(job.appliedDate).toLocaleDateString()}
+                </p>
+              )}
               {job.description && (
                 <p className="text-xs text-muted-foreground mb-2 line-clamp-2">
                   {job.description}
@@ -143,6 +171,17 @@ export default function JobApplicationCard({
                     <Edit2 className="mr-2 h-4 w-4" />
                     Edit
                   </DropdownMenuItem>
+                  {job.jobUrl && (
+                    <DropdownMenuItem
+                      onClick={() => {
+                        navigator.clipboard.writeText(job.jobUrl!);
+                        toast.success("Link copied to clipboard");
+                      }}
+                    >
+                      <Copy className="mr-2 h-4 w-4" />
+                      Copy link
+                    </DropdownMenuItem>
+                  )}
                   {columns.length > 1 && (
                     <>
                       {columns
@@ -158,8 +197,8 @@ export default function JobApplicationCard({
                     </>
                   )}
                   <DropdownMenuItem
-                    className="text-destructive"
-                    onClick={() => handleDelete()}
+                    className="text-destructive focus:text-destructive"
+                    onClick={() => setShowDeleteConfirm(true)}
                   >
                     <Trash2 className="mr-2 h-4 w-4" />
                     Delete
@@ -170,6 +209,29 @@ export default function JobApplicationCard({
           </div>
         </CardContent>
       </Card>
+
+      <AlertDialog open={showDeleteConfirm} onOpenChange={setShowDeleteConfirm}>
+        <AlertDialogContent>
+          <AlertDialogHeader>
+            <AlertDialogTitle>Delete job application?</AlertDialogTitle>
+            <AlertDialogDescription>
+              This will permanently delete &quot;{job.position}&quot; at {job.company}. This action cannot be undone.
+            </AlertDialogDescription>
+          </AlertDialogHeader>
+          <AlertDialogFooter>
+            <AlertDialogCancel>Cancel</AlertDialogCancel>
+            <AlertDialogAction
+              onClick={(e) => {
+                e.preventDefault();
+                handleDelete();
+              }}
+              className="bg-destructive text-destructive-foreground hover:bg-destructive/90"
+            >
+              Delete
+            </AlertDialogAction>
+          </AlertDialogFooter>
+        </AlertDialogContent>
+      </AlertDialog>
 
       <Dialog open={isEditing} onOpenChange={setIsEditing}>
         <DialogContent className="w-[calc(100vw-2rem)] max-w-2xl max-h-[90vh] overflow-y-auto">

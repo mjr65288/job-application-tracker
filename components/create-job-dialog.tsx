@@ -1,6 +1,7 @@
 "use client";
 
 import { Plus } from "lucide-react";
+import { toast } from "sonner";
 import { Button } from "./ui/button";
 import {
   Dialog,
@@ -57,11 +58,12 @@ export default function CreateJobApplicationDialog({
       if (!result.error) {
         setFormData(INITIAL_FORM_DATA);
         setOpen(false);
+        toast.success("Job application added");
       } else {
-        console.error("Failed to create job: ", result.error);
+        toast.error(result.error);
       }
     } catch (err) {
-      console.error(err);
+      toast.error("Failed to create job application");
     }
   }
 

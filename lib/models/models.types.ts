@@ -11,6 +11,7 @@ export interface JobApplication {
   columnId?: string;
   tags?: string[];
   description?: string;
+  appliedDate?: string;
 }
 
 export interface Column {

@@ -84,6 +84,7 @@ export async function createJobApplication(data: JobApplicationData) {
     description,
     status: "applied",
     order: maxOrder ? maxOrder.order + 1 : 0,
+    appliedDate: new Date(),
   });
 
   await Column.findByIdAndUpdate(columnId, {

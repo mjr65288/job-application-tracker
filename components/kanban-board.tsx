@@ -41,6 +41,7 @@ import {
 } from "@dnd-kit/sortable";
 import { CSS } from "@dnd-kit/utilities";
 import { useState } from "react";
+import { toast } from "sonner";
 
 interface KanbanBoardProps {
   board: Board;
@@ -106,6 +107,9 @@ function DroppableColumn({
             <CardTitle className="text-white text-base font-semibold">
               {column.name}
             </CardTitle>
+            <span className="rounded-full bg-white/25 px-2 py-0.5 text-xs font-medium">
+              {sortedJobs.length}
+            </span>
           </div>
           <DropdownMenu>
             <DropdownMenuTrigger asChild>
@@ -137,13 +141,20 @@ function DroppableColumn({
           items={sortedJobs.map((job) => job._id)}
           strategy={verticalListSortingStrategy}
         >
-          {sortedJobs.map((job, key) => (
-            <SortableJobCard
-              key={key}
-              job={{ ...job, columnId: job.columnId || column._id }}
-              columns={sortedColumns}
-            />
-          ))}
+          {sortedJobs.length === 0 ? (
+            <div className="flex flex-col items-center justify-center py-8 text-center text-muted-foreground">
+              <p className="text-sm">No jobs yet</p>
+              <p className="text-xs mt-1">Add your first job to get started</p>
+            </div>
+          ) : (
+            sortedJobs.map((job, key) => (
+              <SortableJobCard
+                key={key}
+                job={{ ...job, columnId: job.columnId || column._id }}
+                columns={sortedColumns}
+              />
+            ))
+          )}
         </SortableContext>
 
         <CreateJobApplicationDialog columnId={column._id} boardId={boardId} />
@@ -306,7 +317,12 @@ export default function KanbanBoard({ board, userId }: KanbanBoardProps) {
       return;
     }
 
-    await moveJob(activeId, targetColumnId, newOrder);
+    try {
+      await moveJob(activeId, targetColumnId, newOrder);
+      toast.success("Job moved");
+    } catch {
+      toast.error("Failed to move job");
+    }
   }
 
   const activeJob = sortedColumns
