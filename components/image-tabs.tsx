@@ -8,24 +8,25 @@ export default function ImageTabs() {
   const [activeTab, setActiveTab] = useState("organize"); // organize, hired, boards
 
   return (
-    <section className="border-t border-border bg-background py-16">
+    <section className="border-t border-border bg-background py-10 sm:py-16">
       <div className="container mx-auto px-4">
         <div className="mx-auto max-w-6xl">
           {/* Tabs */}
-          <div className="flex gap-2 justify-center mb-8">
+          <div className="flex flex-wrap gap-2 justify-center mb-6 sm:mb-8">
             <Button
               onClick={() => setActiveTab("organize")}
-              className={`rounded-lg px-6 py-3 text-sm font-medium transition-colors ${
+              className={`rounded-lg px-4 py-2.5 sm:px-6 sm:py-3 text-xs sm:text-sm font-medium transition-colors shrink-0 ${
                 activeTab === "organize"
                   ? "bg-primary text-primary-foreground"
                   : "bg-muted text-muted-foreground hover:bg-muted/80"
               }`}
             >
-              Organize Applications
+              <span className="hidden sm:inline">Organize Applications</span>
+              <span className="sm:hidden">Organize</span>
             </Button>
             <Button
               onClick={() => setActiveTab("hired")}
-              className={`rounded-lg px-6 py-3 text-sm font-medium transition-colors ${
+              className={`rounded-lg px-4 py-2.5 sm:px-6 sm:py-3 text-xs sm:text-sm font-medium transition-colors shrink-0 ${
                 activeTab === "hired"
                   ? "bg-primary text-primary-foreground"
                   : "bg-muted text-muted-foreground hover:bg-muted/80"
@@ -35,13 +36,14 @@ export default function ImageTabs() {
             </Button>
             <Button
               onClick={() => setActiveTab("boards")}
-              className={`rounded-lg px-6 py-3 text-sm font-medium transition-colors ${
+              className={`rounded-lg px-4 py-2.5 sm:px-6 sm:py-3 text-xs sm:text-sm font-medium transition-colors shrink-0 ${
                 activeTab === "boards"
                   ? "bg-primary text-primary-foreground"
                   : "bg-muted text-muted-foreground hover:bg-muted/80"
               }`}
             >
-              Manage Boards
+              <span className="hidden sm:inline">Manage Boards</span>
+              <span className="sm:hidden">Boards</span>
             </Button>
           </div>
           <div className="relative mx-auto max-w-5xl overflow-hidden rounded-lg border border-border shadow-xl">
@@ -51,6 +53,8 @@ export default function ImageTabs() {
                 alt="Organize Applications"
                 width={1200}
                 height={800}
+                sizes="(max-width: 768px) 100vw, 1200px"
+                className="w-full h-auto"
               />
             )}
 
@@ -60,6 +64,8 @@ export default function ImageTabs() {
                 alt="Get Hired"
                 width={1200}
                 height={800}
+                sizes="(max-width: 768px) 100vw, 1200px"
+                className="w-full h-auto"
               />
             )}
 
@@ -69,6 +75,8 @@ export default function ImageTabs() {
                 alt="Manage Boards"
                 width={1200}
                 height={800}
+                sizes="(max-width: 768px) 100vw, 1200px"
+                className="w-full h-auto"
               />
             )}
           </div>

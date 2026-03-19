@@ -29,6 +29,7 @@ import {
   DragOverlay,
   DragStartEvent,
   PointerSensor,
+  TouchSensor,
   useDroppable,
   useSensor,
   useSensors,
@@ -95,7 +96,7 @@ function DroppableColumn({
   const sortedJobs =
     column.jobApplications?.sort((a, b) => a.order - b.order) || [];
   return (
-    <Card className="min-w-[300px] flex-shrink-0 shadow-md p-0">
+    <Card className="min-w-[260px] sm:min-w-[280px] md:min-w-[300px] flex-shrink-0 shadow-md p-0">
       <CardHeader
         className={`${config.color} text-white rounded-t-lg pb-3 pt-3`}
       >
@@ -128,7 +129,7 @@ function DroppableColumn({
 
       <CardContent
         ref={setNodeRef}
-        className={`space-y-2 pt-4 bg-muted/30 min-h-[400px] rounded-b-lg ${
+        className={`space-y-2 pt-4 bg-muted/30 min-h-[320px] sm:min-h-[400px] rounded-b-lg snap-start ${
           isOver ? "ring-2 ring-primary" : ""
         }`}
       >
@@ -199,6 +200,12 @@ export default function KanbanBoard({ board, userId }: KanbanBoardProps) {
     useSensor(PointerSensor, {
       activationConstraint: {
         distance: 8,
+      },
+    }),
+    useSensor(TouchSensor, {
+      activationConstraint: {
+        delay: 200,
+        tolerance: 5,
       },
     })
   );
@@ -312,8 +319,8 @@ export default function KanbanBoard({ board, userId }: KanbanBoardProps) {
       onDragStart={handleDragStart}
       onDragEnd={handleDragEnd}
     >
-      <div className="space-y-4">
-        <div className="flex gap-4 overflow-x-auto pb-4">
+      <div className="space-y-4 -mx-4 sm:mx-0">
+        <div className="flex gap-3 sm:gap-4 overflow-x-auto pb-4 px-4 sm:px-0 scroll-smooth snap-x snap-mandatory [scrollbar-width:thin]">
           {sortedColumns.map((col, key) => {
             const config = COLUMN_CONFIG[key] || {
               color: "bg-gray-500",

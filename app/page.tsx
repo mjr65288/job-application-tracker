@@ -8,12 +8,12 @@ export default function Home() {
     <div className="flex min-h-screen flex-col bg-background">
       <main className="flex-1">
         {/* Hero Section */}
-        <section className="container mx-auto px-4 py-32">
+        <section className="container mx-auto px-4 py-16 sm:py-24 md:py-32">
           <div className="mx-auto max-w-4xl text-center">
-            <h1 className="text-foreground mb-6 text-6xl font-bold">
+            <h1 className="text-foreground mb-4 sm:mb-6 text-3xl font-bold sm:text-4xl md:text-5xl lg:text-6xl">
               A better way to track your job application.
             </h1>
-            <p className="text-muted-foreground mb-10 text-xl">
+            <p className="text-muted-foreground mb-8 sm:mb-10 text-base sm:text-lg md:text-xl">
               Capture, organize, and manage your job search in one place.
             </p>
             <div className="flex flex-col items-center gap-4">
@@ -33,14 +33,14 @@ export default function Home() {
         <ImageTabs />
 
         {/* Features Section */}
-        <section className="border-t border-border bg-background py-24">
+        <section className="border-t border-border bg-background py-12 sm:py-16 md:py-24">
           <div className="container mx-auto px-4">
-            <div className="grid gap-12 md:grid-cols-3">
+            <div className="grid gap-8 sm:gap-10 md:gap-12 md:grid-cols-3">
               <div className="flex flex-col">
                 <div className="mb-4 inline-flex h-12 w-12 items-center justify-center rounded-lg bg-primary/10">
                   <Briefcase className="h-6 w-6 text-primary" />
                 </div>
-                <h3 className="mb-3 text-2xl font-semibold text-foreground">
+                <h3 className="mb-2 sm:mb-3 text-xl font-semibold text-foreground sm:text-2xl">
                   Organize Applications
                 </h3>
                 <p className="text-muted-foreground">
@@ -52,7 +52,7 @@ export default function Home() {
                 <div className="mb-4 inline-flex h-12 w-12 items-center justify-center rounded-lg bg-primary/10">
                   <TrendingUp className="h-6 w-6 text-primary" />
                 </div>
-                <h3 className="mb-3 text-2xl font-semibold text-foreground">
+                <h3 className="mb-2 sm:mb-3 text-xl font-semibold text-foreground sm:text-2xl">
                   Track Progress
                 </h3>
                 <p className="text-muted-foreground">
@@ -64,7 +64,7 @@ export default function Home() {
                 <div className="mb-4 inline-flex h-12 w-12 items-center justify-center rounded-lg bg-primary/10">
                   <CheckCircle2 className="h-6 w-6 text-primary" />
                 </div>
-                <h3 className="mb-3 text-2xl font-semibold text-foreground">
+                <h3 className="mb-2 sm:mb-3 text-xl font-semibold text-foreground sm:text-2xl">
                   Stay Organized
                 </h3>
                 <p className="text-muted-foreground">
