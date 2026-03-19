@@ -50,7 +50,7 @@ export default function JobApplicationCard({
 }: JobApplicationCardProps) {
   const [isEditing, setIsEditing] = useState(false);
   const [showDeleteConfirm, setShowDeleteConfirm] = useState(false);
-  const [formData, setFormData] = useState({
+  const initialFormData = {
     company: job.company,
     position: job.position,
     location: job.location || "",
@@ -60,7 +60,8 @@ export default function JobApplicationCard({
     columnId: job.columnId || "",
     tags: job.tags?.join(", ") || "",
     description: job.description || "",
-  });
+  };
+  const [formData, setFormData] = useState(initialFormData);
 
   async function handleUpdate(e: React.FormEvent) {
     e.preventDefault();
@@ -233,7 +234,13 @@ export default function JobApplicationCard({
         </AlertDialogContent>
       </AlertDialog>
 
-      <Dialog open={isEditing} onOpenChange={setIsEditing}>
+      <Dialog
+        open={isEditing}
+        onOpenChange={(open) => {
+          setIsEditing(open);
+          setFormData(initialFormData);
+        }}
+      >
         <DialogContent className="w-[calc(100vw-2rem)] max-w-2xl max-h-[90vh] overflow-y-auto">
           <DialogHeader>
             <DialogTitle>Edit Job Application</DialogTitle>
@@ -340,7 +347,10 @@ export default function JobApplicationCard({
               <Button
                 type="button"
                 variant="outline"
-                onClick={() => setIsEditing(false)}
+                onClick={() => {
+                  setIsEditing(false);
+                  setFormData(initialFormData);
+                }}
               >
                 Cancel
               </Button>

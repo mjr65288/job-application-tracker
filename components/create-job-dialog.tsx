@@ -67,8 +67,15 @@ export default function CreateJobApplicationDialog({
     }
   }
 
+  function handleOpenChange(newOpen: boolean) {
+    setOpen(newOpen);
+    if (!newOpen) {
+      setFormData(INITIAL_FORM_DATA);
+    }
+  }
+
   return (
-    <Dialog open={open} onOpenChange={setOpen}>
+    <Dialog open={open} onOpenChange={handleOpenChange}>
       <DialogTrigger>
         <Button
           variant="outline"
@@ -184,7 +191,7 @@ export default function CreateJobApplicationDialog({
             <Button
               type="button"
               variant="outline"
-              onClick={() => setOpen(false)}
+              onClick={() => handleOpenChange(false)}
             >
               Cancel
             </Button>
